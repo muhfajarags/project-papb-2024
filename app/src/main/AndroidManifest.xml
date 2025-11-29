@@ -26,17 +26,16 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-
+        <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".MusicPlayerActivity" />
-
-        <service
-            android:name=".MusicService"
-            android:exported="false"
-            android:foregroundServiceType="mediaPlayback" />
     </application>
 </manifest>

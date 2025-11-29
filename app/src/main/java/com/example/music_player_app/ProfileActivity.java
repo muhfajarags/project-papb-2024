@@ -1,116 +1,101 @@
 package com.example.music_player_app;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+public class ProfileActivity extends AppCompatActivity {
 
-import java.util.ArrayList;
-import java.util.List;
+    // Harus sama dengan yang dipakai di LoginActivity & SplashActivity
+    private static final String PREF_NAME = "my_app_prefs";
+    private static final String KEY_EMAIL = "email";
 
-public class ProfileActivity extends AppCompatActivity implements EditProfileFragment.OnProfileUpdateListener {
-
+    private ImageButton arrowBack;
     private TextView profileName;
-    private List<MyPlaylistProfile> collection;
-    private MyPlaylistProfileCollection adapter;
-    private RecyclerView rvCollection;
-
-    private DatabaseReference databaseReference;
-    private String userId = "UserID";
+    private Button editProfileBtn;
+    private RecyclerView myRecyclerView;
+    private Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Kalau nama layout-mu "profile.xml", maka:
         setContentView(R.layout.profile);
+        // Kalau ternyata namanya "activity_profile.xml", ganti jadi:
+        // setContentView(R.layout.activity_profile);
 
-        // Inisialisasi Firebase Database Reference
-        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
+        initViews();
+        bindUserData();
+        setupActions();
+    }
 
-        // Inisialisasi RecyclerView dan adapter
-        initializeRecyclerView();
-
+    private void initViews() {
+        arrowBack = findViewById(R.id.arrow_back);
         profileName = findViewById(R.id.profileName);
-
-        // Ambil data username dari Firebase
-        loadUsernameFromDatabase();
-
-        Button editProfileBtn = findViewById(R.id.editProfileBtn);
-        ImageButton backButton = findViewById(R.id.arrow_back);
-
-        editProfileBtn.setOnClickListener(v -> openEditProfileFragment());
-        backButton.setOnClickListener(v -> finish());
+        editProfileBtn = findViewById(R.id.editProfileBtn);
+        myRecyclerView = findViewById(R.id.myRecyclerView);
+        btnLogout = findViewById(R.id.btn_logout);
     }
 
-    private void openEditProfileFragment() {
-        // Tampilkan container fragment
-        findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
+    private void bindUserData() {
+        // Ambil email yang disimpan saat login
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String email = prefs.getString(KEY_EMAIL, null);
 
-        EditProfileFragment fragment = new EditProfileFragment();
-        Bundle args = new Bundle();
-        args.putString("username", profileName.getText().toString());
-        fragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    @Override
-    public void onProfileUpdated(String newUsername) {
-        profileName.setText(newUsername);
-
-        // Simpan username baru ke Firebase
-        databaseReference.child("username").setValue(newUsername);
-    }
-
-    private void loadUsernameFromDatabase() {
-        databaseReference.child("username").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                String username = snapshot.getValue(String.class);
-                if (username != null) {
-                    profileName.setText(username);
-                }
+        if (email != null) {
+            // Contoh: pakai bagian sebelum '@' sebagai nama tampilan
+            String displayName = email;
+            int atIndex = email.indexOf("@");
+            if (atIndex > 0) {
+                displayName = email.substring(0, atIndex);
             }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Handle error
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            findViewById(R.id.fragment_container).setVisibility(View.GONE);
-            super.onBackPressed();
+            profileName.setText(displayName);
         } else {
-            super.onBackPressed();
+            // fallback kalau belum ada di prefs
+            profileName.setText("User");
         }
+
+        // myRecyclerView:
+        // Di sini kamu isi adapter + layoutManager kalau sudah punya data playlist
+        // Contoh:
+        // myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // myRecyclerView.setAdapter(myPlaylistAdapter);
     }
 
-    private void initializeRecyclerView() {
-        this.collection = new ArrayList<>();
-        this.collection.add(new MyPlaylistProfile("OVT 24/7", "12 September 2024", "img_playlist1"));
-        this.collection.add(new MyPlaylistProfile("Pingin Nilai A", "12 September 2024", "img_playlist2"));
+    private void setupActions() {
+        // Tombol back di kiri atas
+        arrowBack.setOnClickListener(v -> onBackPressed());
 
-        this.adapter = new MyPlaylistProfileCollection(this, this.collection);
-        this.rvCollection = this.findViewById(R.id.myRecyclerView);
-        this.rvCollection.setLayoutManager(new LinearLayoutManager(this));
-        this.rvCollection.setAdapter(this.adapter);
+        // Edit profile (sementara kasih Toast / nanti arahkan ke EditProfileActivity)
+        editProfileBtn.setOnClickListener(v ->
+                Toast.makeText(ProfileActivity.this,
+                        "Edit Profile coming soon",
+                        Toast.LENGTH_SHORT).show()
+        );
+
+        // Logout
+        btnLogout.setOnClickListener(v -> logout());
+    }
+
+    private void logout() {
+        // Hapus semua data session
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.apply();
+
+        // Arahkan ke LoginActivity dan clear back stack
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

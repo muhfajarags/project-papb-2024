@@ -53,18 +53,19 @@
 
             <EditText
                 android:id="@+id/email_edit_text"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="your email here ..."
                 android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:textColor="@android:color/transparent"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 tools:ignore="MissingConstraints,TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="8dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         <TextView
             android:id="@+id/password_text"
@@ -89,13 +90,14 @@
 
             <EditText
                 android:id="@+id/password_edit_text"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="your password here ..."
                 android:imeOptions="actionSearch"
                 android:inputType="text"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 tools:ignore="MissingConstraints,TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="16dp"
@@ -105,20 +107,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp">
-
-            <TextView
-                android:id="@+id/policy_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Forgot Password?"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -129,99 +121,16 @@
             android:paddingVertical="13dp"
             android:text="login"
             android:textSize="16sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="47dp"
-            >
-            <View
-                android:layout_width="164dp"
-                android:layout_height="2dp"
-                android:background="@color/white"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="12dp"/>
 
-            <TextView
-                android:id="@+id/or"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="or"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                />
-            <View
-                android:layout_width="164dp"
-                android:layout_height="2dp"
-                android:background="@color/white"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="12dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="23dp">
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_search_bar"
-                android:fontFamily="@font/poppins_semibold"
-                android:paddingHorizontal="26dp"
-                android:paddingVertical="13dp"
-                android:text="Google"
-                android:layout_marginHorizontal="21dp"
-                android:textSize="16sp"
-                android:drawableLeft="@drawable/ic_google"
-                android:drawablePadding="8dp" />
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_search_bar"
-                android:fontFamily="@font/poppins_semibold"
-                android:paddingHorizontal="26dp"
-                android:paddingVertical="13dp"
-                android:text="Spotify"
-                android:layout_marginHorizontal="21dp"
-                android:textSize="16sp"
-                android:drawableLeft="@drawable/ic_spotify"
-                android:drawablePadding="8dp"
-            />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="125dp">
-            <TextView
-                android:id="@+id/already_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Don’t have an account? "
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="16sp"
-                android:gravity="center"
-                />
-            <Button
-                android:id="@+id/log_in_alt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="signup"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="16sp"
-                android:gravity="start"
-                android:background="@android:color/transparent"
-                />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="Don't have an account? Register"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins_regular" />
     </LinearLayout>
 </ScrollView>
